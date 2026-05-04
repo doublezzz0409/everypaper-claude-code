@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Output (user-generated content)
+output/sections/
+output/final/
+output/data/scripts/
+output/data/_data-checksums.json
+output/data/data-profiles.json
+output/data/learned-rules.json
+output/data/plan.json
+output/data/snapshots/
+output/data/business-rules.json
+output/data/env-snapshot.json
+
+# Papers (user-specific literature)
+papers/*.pdf
+papers/*.docx
+papers/*.bib
+
+# Logs
+*.log
+audit/
+
+# Temp
+*.tmp
+*.temp

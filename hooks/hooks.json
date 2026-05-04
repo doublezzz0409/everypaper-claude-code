@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"session:start\" \"scripts/hooks/session-start.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Load paper context on session start: scan papers/, load references.json, report progress",
+        "id": "session:start"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:bash:code-execution\" \"scripts/hooks/pre-bash-code-execution.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Force: numerical calculations must use code execution, no mental math",
+        "id": "pre:bash:code-execution"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:calc:verify\" \"scripts/hooks/pre-calc-verify.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Verify: check if data files changed since last calculation (checksum comparison)",
+        "id": "pre:calc:verify"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:pipeline:check\" \"scripts/hooks/pre-pipeline-check.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Pipeline: warn about stale upstream steps before calculation execution",
+        "id": "pre:pipeline:check"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:calc:quality\" \"scripts/hooks/pre-calc-quality.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Quality: check input data for encoding issues, null rates, business rule violations (blocks on critical)",
+        "id": "pre:calc:quality"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:write:no-fabrication\" \"scripts/hooks/pre-write-no-fabrication.js\" \"minimal,standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Force: detect fabricated literature references, data, formulas",
+        "id": "pre:write:no-fabrication"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:write:citation-check\" \"scripts/hooks/pre-write-citation-check.js\" \"minimal,standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Force: citations must have sources, findable in papers/",
+        "id": "pre:write:citation-check"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:write:method-placeholder\" \"scripts/hooks/pre-write-method-placeholder.js\" \"minimal,standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Force: uncertain methods must be marked [待人类确认]",
+        "id": "pre:write:method-placeholder"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:write:data-guard\" \"scripts/hooks/pre-write-data-guard.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Guard: validate CSV format before writing data files (blocks on invalid format)",
+        "id": "pre:write:data-guard"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:observe\" \"scripts/hooks/observe.js\" \"strict\"",
+            "async": true,
+            "timeout": 5
+          }
+        ],
+        "description": "Observe: async monitoring of all tool calls for data/literature pattern detection (strict mode only)",
+        "id": "pre:observe"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:config-protection\" \"scripts/hooks/config-protection.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Protect academic config files (references.bib, CLAUDE.md, templates) from accidental modification",
+        "id": "pre:config-protection"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:bash:audit\" \"scripts/hooks/post-bash-audit.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Audit: log all code execution for review",
+        "id": "post:bash:audit"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:calc:save\" \"scripts/hooks/post-calc-save.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Archive: save Python/R calculation code to output/data/scripts/ for traceability",
+        "id": "post:calc:save"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:calc:stderr\" \"scripts/hooks/post-calc-stderr.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Analyze: capture and analyze Python/R stderr for errors, warnings, deprecation messages",
+        "id": "post:calc:stderr"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:calc:output-verify\" \"scripts/hooks/post-calc-output-verify.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Verify: check output file exists, row count reasonable, no critical issues (blocks on failure)",
+        "id": "post:calc:output-verify"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:step:report\" \"scripts/hooks/step-report.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Report: generate structured step report after each calculation",
+        "id": "post:step:report"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:consistency:check\" \"scripts/hooks/cross-step-consistency.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Consistency: verify column names and row counts across pipeline steps (blocks on critical mismatch)",
+        "id": "post:consistency:check"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:write:quality-check\" \"scripts/hooks/post-write-quality-check.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Quality check: review written content for compliance",
+        "id": "post:write:quality-check"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:observe\" \"scripts/hooks/observe.js\" \"strict\"",
+            "async": true,
+            "timeout": 5
+          }
+        ],
+        "description": "Observe: async post-tool observation for pattern detection (strict mode only)",
+        "id": "post:observe"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:tool-failure\" \"scripts/hooks/post-tool-failure.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Handle tool failures: log errors, provide recovery guidance for Python/R",
+        "id": "post:tool-failure"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:compact\" \"scripts/hooks/pre-compact.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Save paper state before context compaction to preserve progress",
+        "id": "pre:compact"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"stop:session-summary\" \"scripts/hooks/stop-session-summary.js\" \"minimal,standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Generate session summary and save paper state",
+        "id": "stop:session-summary"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"stop:pipeline:report\" \"scripts/hooks/pipeline-report.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "Pipeline: generate full research flow report and flow diagram at session end",
+        "id": "stop:pipeline:report"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"stop:cost-tracker\" \"scripts/hooks/cost-tracker.js\" \"minimal,standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Track token usage and estimated cost per session",
+        "id": "stop:cost-tracker"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"stop:evaluate-session\" \"scripts/hooks/evaluate-session.js\" \"standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Evaluate session quality: count sections, citations, data operations",
+        "id": "stop:evaluate-session"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"stop:desktop-notify\" \"scripts/hooks/desktop-notify.js\" \"standard,strict\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Send desktop notification when session ends (macOS/WSL/Linux)",
+        "id": "stop:desktop-notify"
+      }
+    ]
+  }
+}
