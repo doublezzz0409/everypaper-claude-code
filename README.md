@@ -131,11 +131,11 @@ node tests/run-all.js
 
 ## 致谢
 
-这个项目的诞生，离不开 [everything-claude-code](https://github.com/nicekate/everything-claude-code) 项目的启发和架构参考。
+这个项目的诞生，离不开 [everything-claude-code](https://github.com/affaan-m/everything-claude-code) 项目的启发和架构参考。
 
 everything-claude-code 用 agents / skills / hooks / commands 的架构模式，展示了 Claude Code 作为开发工具的真正潜力 — 它不只是一个聊天机器人，而是一个可以被精确编排、严格约束、持续进化的开发平台。正是这套架构理念，让我意识到学术写作同样需要这种"工具操作员"式的严谨编排：把人类的专业判断和工具的自动化执行清晰地分离，用钩子系统强制执行规则，让每一行代码、每一个数字、每一条引用都有据可查。
 
-感谢 nicekate 和 everything-claude-code 的贡献者们，你们的工作让这个项目成为可能。
+感谢 affaan-m 和 everything-claude-code 的贡献者们，你们的工作让这个项目成为可能。
 
 ## 许可
 
