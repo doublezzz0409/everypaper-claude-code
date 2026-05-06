@@ -35,7 +35,12 @@ const PROFILES = {
     'pre:config-protection',
     'stop:cost-tracker',
     'stop:evaluate-session',
-    'stop:desktop-notify'
+    'stop:desktop-notify',
+    'pre:write:structure-check',
+    'pre:write:citation-format',
+    'post:write:xref-check',
+    'post:write:numbering-check',
+    'post:figure:verify'
   ],
   strict: [
     'pre:bash:code-execution',
@@ -54,7 +59,12 @@ const PROFILES = {
     'pre:config-protection',
     'stop:cost-tracker',
     'stop:evaluate-session',
-    'stop:desktop-notify'
+    'stop:desktop-notify',
+    'pre:write:structure-check',
+    'pre:write:citation-format',
+    'post:write:xref-check',
+    'post:write:numbering-check',
+    'post:figure:verify'
   ]
 };
 

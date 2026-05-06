@@ -1,0 +1,42 @@
+{
+  "citation_style": "apa",
+  "table_style": "three-line",
+  "table_title_position": "above",
+  "figure_title_position": "below",
+  "section_order": [
+    "abstract",
+    "introduction",
+    "literature_review",
+    "methodology",
+    "results",
+    "discussion",
+    "conclusion",
+    "references"
+  ],
+  "required_sections": [
+    "introduction",
+    "literature_review",
+    "methodology",
+    "results",
+    "conclusion"
+  ],
+  "abstract": {
+    "word_min": 150,
+    "word_max": 300
+  },
+  "keywords": {
+    "min_count": 3,
+    "max_count": 5
+  },
+  "numbering": {
+    "table_prefix": "Table",
+    "figure_prefix": "Figure",
+    "equation_style": "parenthetical"
+  },
+  "typography": {
+    "font_family": "Times New Roman",
+    "font_size_pt": 12,
+    "line_spacing": 1.5,
+    "margin_cm": 2.54
+  }
+}

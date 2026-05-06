@@ -136,6 +136,30 @@
         ],
         "description": "Protect academic config files (references.bib, CLAUDE.md, templates) from accidental modification",
         "id": "pre:config-protection"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:write:structure-check\" \"scripts/hooks/pre-write-structure-check.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Structure: verify required sections exist before writing paper content",
+        "id": "pre:write:structure-check"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:write:citation-format\" \"scripts/hooks/pre-write-citation-format.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Citation: check citation style consistency with detected style",
+        "id": "pre:write:citation-format"
       }
     ],
     "PostToolUse": [
@@ -235,6 +259,42 @@
         ],
         "description": "Observe: async post-tool observation for pattern detection (strict mode only)",
         "id": "post:observe"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:write:xref-check\" \"scripts/hooks/post-write-xref-check.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "XRef: verify cross-references (Table/Figure citations match actual items)",
+        "id": "post:write:xref-check"
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:write:numbering-check\" \"scripts/hooks/post-write-numbering-check.js\" \"standard,strict\"",
+            "timeout": 5
+          }
+        ],
+        "description": "Numbering: check Table/Figure numbering continuity",
+        "id": "post:write:numbering-check"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:figure:verify\" \"scripts/hooks/post-figure-verify.js\" \"standard,strict\"",
+            "timeout": 10
+          }
+        ],
+        "description": "FigureQA: verify generated figures meet quality standards (DPI, labels, size)",
+        "id": "post:figure:verify"
       }
     ],
     "PostToolUseFailure": [

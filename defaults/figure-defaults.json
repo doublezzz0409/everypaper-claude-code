@@ -1,0 +1,26 @@
+{
+  "dpi": 300,
+  "figsize": [6, 4],
+  "font_family": "Times New Roman",
+  "font_size": 11,
+  "title_font_size": 12,
+  "label_font_size": 11,
+  "legend_font_size": 10,
+  "palette": "colorblind-safe",
+  "colors": [
+    "#0072B2",
+    "#D55E00",
+    "#009E73",
+    "#CC79A7",
+    "#F0E442",
+    "#56B4E9",
+    "#E69F00",
+    "#000000"
+  ],
+  "line_width": 1.5,
+  "marker_size": 6,
+  "alpha": 0.8,
+  "grid": true,
+  "tight_layout": true,
+  "format": "png"
+}
